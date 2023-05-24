@@ -43,7 +43,11 @@ router.post(`/`, async (req, res) => {
 })
 
 router.get(`/`, async (req, res) => {
-    const products = await productCollection.find().populate('category')
+    let filter = {}
+    if (req.query.categories) {
+        filter = { category: req.query.categories.split(',') }
+    }
+    const products = await productCollection.find(filter).populate('category')
     res.send(products)
 })
 
@@ -160,10 +164,10 @@ router.delete('/:id', (req, res) => {
         })
 })
 
-router.get('/get/count', async(req, res) => {
+router.get('/get/count', async (req, res) => {
     const productsCount = await productCollection.countDocuments()
     if (productsCount) {
-        res.status(200).json({productsCount:productsCount})
+        res.status(200).json({ productsCount: productsCount })
     }
     if (!productsCount) {
         res.status(400).json({
@@ -172,16 +176,18 @@ router.get('/get/count', async(req, res) => {
         })
     }
 })
-router.get('/get/featured', async(req, res) => {
-    const product = await productCollection.find()
-    res.send({productsCount:productsCount})
+router.get('/get/featured/:count', async (req, res) => {
+    const limit = req.params.count || 0
+    const product = await productCollection
+        .find({ isFeatured: true })
+        .limit(+limit)
     if (product) {
         res.status(200).json(product)
     }
     if (!product) {
         res.status(400).json({
             success: false,
-            message: 'Product cannot be updated',
+            message: 'Featured Product Not Found',
         })
     }
 })
