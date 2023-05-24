@@ -50,5 +50,11 @@ const productsSchema = mongoose.Schema({
         default: Date.now,
     },
 })
+productsSchema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+productsSchema.set('toJSON', {
+    virtuals: true,
+})
 const productCollection = mongoose.model('product', productsSchema)
 module.exports = productCollection
