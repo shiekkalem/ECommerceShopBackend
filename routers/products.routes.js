@@ -6,7 +6,7 @@ const categoriesCollection = require('../models/categories.model')
 const mongoose = require('mongoose')
 
 router.post(`/`, async (req, res) => {
-    try {
+   
         const category = await categoriesCollection.findById(req.body.category)
         if (!category) {
             res.status(400).json({
@@ -32,14 +32,11 @@ router.post(`/`, async (req, res) => {
         if (!product) {
             res.status(400).json({
                 status: false,
-                message: 'product cannot be saved',
+                message: 'Product cannot be saved',
             })
         }
         res.status(200).json(product)
-    } catch (error) {
-        res.send(error)
-        return
-    }
+   
 })
 
 router.get(`/`, async (req, res) => {
