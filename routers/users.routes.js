@@ -12,7 +12,7 @@ router.get(`/`, async (req, res) => {
     res.send(user)
 })
 
-router.post(`/`, async (req, res) => {
+router.post(`/register`, async (req, res) => {
     const enCryptedPsw = bycrypt.hashSync(req.body.passwordHash, 10)
     let user = new usersCollection({
         name: req.body.name,
