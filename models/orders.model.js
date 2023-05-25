@@ -57,7 +57,7 @@ orderSchema.set('toJSON', {
     virtuals: true,
 })
 
-exports.ordersCollection = mongoose.model('Order', orderSchema)
+exports.Order = mongoose.model('Order', orderSchema)
 
 /**
 Order Example:
