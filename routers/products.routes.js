@@ -6,37 +6,35 @@ const categoriesCollection = require('../models/categories.model')
 const mongoose = require('mongoose')
 
 router.post(`/`, async (req, res) => {
-   
-        const category = await categoriesCollection.findById(req.body.category)
-        if (!category) {
-            res.status(400).json({
-                status: false,
-                message: 'Invalid Category Id',
-            })
-            return
-        }
-        let product = new productCollection({
-            name: req.body.name,
-            description: req.body.description,
-            richDescription: req.body.richDescription,
-            brand: req.body.brand,
-            price: req.body.price,
-            category: req.body.category,
-            countInStock: req.body.countInStock,
-            rating: req.body.rating,
-            numReviews: req.body.numReviews,
-            isFeatured: req.body.isFeatured,
-            image: req.body.image,
+    const category = await categoriesCollection.findById(req.body.category)
+    if (!category) {
+        res.status(400).json({
+            status: false,
+            message: 'Invalid Category Id',
         })
-        product = await product.save()
-        if (!product) {
-            res.status(400).json({
-                status: false,
-                message: 'Product cannot be saved',
-            })
-        }
-        res.status(200).json(product)
-   
+        return
+    }
+    let product = new productCollection({
+        name: req.body.name,
+        description: req.body.description,
+        richDescription: req.body.richDescription,
+        brand: req.body.brand,
+        price: req.body.price,
+        category: req.body.category,
+        countInStock: req.body.countInStock,
+        rating: req.body.rating,
+        numReviews: req.body.numReviews,
+        isFeatured: req.body.isFeatured,
+        image: req.body.image,
+    })
+    product = await product.save()
+    if (!product) {
+        res.status(400).json({
+            status: false,
+            message: 'Product cannot be saved',
+        })
+    }
+    res.status(200).json(product)
 })
 
 router.get(`/`, async (req, res) => {
@@ -72,68 +70,61 @@ router.get('/:id', (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-    try {
-        if (req.body.category) {
-            const isValidObjectId = mongoose.isValidObjectId(req.body.category)
+    if (req.body.category) {
+        const isValidObjectId = mongoose.isValidObjectId(req.body.category)
 
-            if (!isValidObjectId) {
-                res.status(400).json({
-                    status: false,
-                    message: 'Invalid Category Id',
-                })
-                return
-            }
-            const category = await categoriesCollection.findById(
-                req.body.category
-            )
-            if (!category) {
-                res.status(400).json({
-                    status: false,
-                    message: 'Invalid Category Id',
-                })
-                return
-            }
-        }
-
-        productCollection
-            .findByIdAndUpdate(
-                req.params.id,
-                {
-                    name: req.body.name,
-                    description: req.body.description,
-                    richDescription: req.body.richDescription,
-                    brand: req.body.brand,
-                    price: req.body.price,
-                    category: req.body.category,
-                    countInStock: req.body.countInStock,
-                    rating: req.body.rating,
-                    numReviews: req.body.numReviews,
-                    isFeatured: req.body.isFeatured,
-                    image: req.body.image,
-                },
-                { new: true }
-            )
-            .then((product) => {
-                if (product) {
-                    res.status(200).json(product)
-                }
-                if (!product) {
-                    res.status(400).json({
-                        success: false,
-                        message: 'Product cannot be updated',
-                    })
-                }
+        if (!isValidObjectId) {
+            res.status(400).json({
+                status: false,
+                message: 'Invalid Category Id',
             })
-            .catch((err) => {
+            return
+        }
+        const category = await categoriesCollection.findById(req.body.category)
+        if (!category) {
+            res.status(400).json({
+                status: false,
+                message: 'Invalid Category Id',
+            })
+            return
+        }
+    }
+
+    productCollection
+        .findByIdAndUpdate(
+            req.params.id,
+            {
+                name: req.body.name,
+                description: req.body.description,
+                richDescription: req.body.richDescription,
+                brand: req.body.brand,
+                price: req.body.price,
+                category: req.body.category,
+                countInStock: req.body.countInStock,
+                rating: req.body.rating,
+                numReviews: req.body.numReviews,
+                isFeatured: req.body.isFeatured,
+                image: req.body.image,
+            },
+            { new: true }
+        )
+        .then((product) => {
+            if (product) {
+                res.status(200).json(product)
+            }
+            if (!product) {
                 res.status(400).json({
                     success: false,
                     message: 'Product cannot be updated',
                 })
+            }
+        })
+        .catch((err) => {
+            res.status(400).json({
+                success: false,
+                message: 'Product cannot be updated',
             })
-    } catch (error) {
-        res.json(err)
-        return
-    }
+        })
 })
 
 router.delete('/:id', (req, res) => {
