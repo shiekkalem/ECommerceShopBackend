@@ -10,7 +10,14 @@ const categoriesSchema = mongoose.Schema({
     },
     color: {
         type: String,
-    }
+    },
 })
-const categoriesCollection = mongoose.model('category', categoriesSchema)
+categoriesSchema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+
+categoriesSchema.set('toJSON', {
+    virtuals: true,
+})
+const categoriesCollection = mongoose.model('Category', categoriesSchema)
 module.exports = categoriesCollection

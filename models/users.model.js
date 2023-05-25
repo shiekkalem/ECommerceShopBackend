@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
-const usersSchema = mongoose.Schema({
+const mongoose = require('mongoose')
+
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -42,5 +44,14 @@ const usersSchema = mongoose.Schema({
         default: '',
     },
 })
-const usersCollection = mongoose.model('user', usersSchema)
+
+userSchema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+
+userSchema.set('toJSON', {
+    virtuals: true,
+})
+
+const usersCollection = mongoose.model('User', userSchema)
 module.exports = usersCollection

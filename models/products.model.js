@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const productsSchema = mongoose.Schema({
+const productSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,7 +13,15 @@ const productsSchema = mongoose.Schema({
         type: String,
         default: '',
     },
-    image: [{ type: String }],
+    image: {
+        type: String,
+        default: '',
+    },
+    images: [
+        {
+            type: String,
+        },
+    ],
     brand: {
         type: String,
         default: '',
@@ -24,21 +32,21 @@ const productsSchema = mongoose.Schema({
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'category',
+        ref: 'Category',
         required: true,
     },
     countInStock: {
         type: Number,
         required: true,
         min: 0,
-        max: 1000,
+        max: 255,
     },
     rating: {
-        type: String,
+        type: Number,
         default: 0,
     },
     numReviews: {
-        type: String,
+        type: Number,
         default: 0,
     },
     isFeatured: {
@@ -50,11 +58,14 @@ const productsSchema = mongoose.Schema({
         default: Date.now,
     },
 })
-productsSchema.virtual('id').get(function () {
+
+productSchema.virtual('id').get(function () {
     return this._id.toHexString()
 })
-productsSchema.set('toJSON', {
+
+productSchema.set('toJSON', {
     virtuals: true,
 })
-const productCollection = mongoose.model('product', productsSchema)
+
+const productCollection = mongoose.model('Product', productSchema)
 module.exports = productCollection
