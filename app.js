@@ -5,12 +5,14 @@ require('dotenv/config')
 const ENV = process.env
 const mongoose = require('mongoose')
 const cors = require('cors')
-
+const authJwt = require('./helpers/jwt')
 app.use(express.json())
 app.use(morgan('tiny'))
 
+app.use(authJwt)
 app.use(cors())
 app.options('*', cors)
+
 app.get('/', (req, res) => {
     res.send('Welcome to Ecommerce APP')
 })
