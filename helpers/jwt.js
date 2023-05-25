@@ -5,6 +5,7 @@ function authJwt() {
     return expressJwt({
         secret: JWT_SECRET,
         algorithms: ['HS256'],
+        isRevoked: isRevoked,
     }).unless({
         path: [
             { url: /\/api\/v1\/products(.*)/, methods: ['GET', 'OPTIONS'] },
@@ -14,5 +15,11 @@ function authJwt() {
             `${API_PATH}users/login`,
         ],
     })
+}
+async function isRevoked(req, payload, done) {
+    // if (!payload.isAdmin) {
+    //     done(null, true)
+    // }
+    done()
 }
 module.exports = authJwt()
