@@ -15,6 +15,7 @@ app.use(errorHandler)
 
 app.use(cors())
 app.options('*', cors)
+app.use("/public/uploads", express.static(__dirname + "/public/uploads"));
 
 app.get('/', (req, res) => {
     res.send('Welcome to Ecommerce APP')
