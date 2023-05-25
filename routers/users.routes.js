@@ -106,6 +106,44 @@ router.put('/:id', async (req, res) => {
         })
 })
 
+router.delete('/:id', (req, res) => {
+    usersCollection
+        .findByIdAndRemove(req.params.id)
+        .then((user) => {
+            if (user) {
+                res.status(200).json({
+                    success: true,
+                    message: 'User Deleted',
+                })
+            }
+            if (!user) {
+                res.status(404).json({
+                    success: false,
+                    message: 'User Not Found',
+                })
+            }
+        })
+        .catch((err) => {
+            res.status(400).json({
+                success: false,
+                message: 'User Not Deleted',
+            })
+        })
+})
+
+router.get('/get/count', async (req, res) => {
+    const usersCount = await usersCollection.countDocuments()
+    if (usersCount) {
+        res.status(200).json({ usersCount: usersCount })
+    }
+    if (!usersCount) {
+        res.status(400).json({
+            success: false,
+            message: 'Users cannot be found',
+        })
+    }
+})
+
 router.post(`/login`, async (req, res) => {
     let user = await usersCollection.findOne({ email: req.body.email })
     if (!user) {
@@ -119,6 +157,7 @@ router.post(`/login`, async (req, res) => {
         const token = jwt.sign(
             {
                 user: user.id,
+                isAdmin: user.isAdmin,
             },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
