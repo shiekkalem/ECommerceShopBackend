@@ -19,27 +19,27 @@ const usersSchema = mongoose.Schema({
     },
     isAdmin: {
         type: Boolean,
-        default:false
+        default: false,
     },
     street: {
         type: String,
-        default:''
+        default: '',
     },
     apartment: {
         type: String,
-        default:''
+        default: '',
     },
     zip: {
         type: String,
-        default:''
+        default: '',
     },
     city: {
         type: String,
-        default:''
+        default: '',
     },
     country: {
         type: String,
-        default:''
+        default: '',
     },
 })
 const usersCollection = mongoose.model('user', usersSchema)
